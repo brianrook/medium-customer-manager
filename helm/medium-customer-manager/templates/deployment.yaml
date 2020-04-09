@@ -21,20 +21,32 @@ spec:
         app: "{{  .Chart.Name }}-selector"
         version: "current"
     spec:
+      imagePullSecrets:
+        - name: regcred
       containers:
-      - name: "{{  .Chart.Name  }}"
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        volumeMounts:
-          - name: data
-            mountPath: /data
-          {{- if and (eq .Values.config.type "file") (hasKey .Values.config "content") }}
-          - name: config-file
-            mountPath: /usr/share/nginx/html/config.js
-            subPath: config.js
-          {{- end }}
-        ports:
-        - containerPort: {{ .Values.service.servicePort}}
-        env:
-          - name: PORT
-            value : "{{ .Values.service.servicePort }}"
+        - name: "{{  .Chart.Name  }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+            {{- if and (eq .Values.config.type "file") (hasKey .Values.config "content") }}
+            - name: config-file
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value : "{{ .Values.service.servicePort }}"
+      volumes:
+        - name: data
+          emptyDir: {}
+        {{- if and (eq .Values.config.type "file") (hasKey .Values.config "content") }}
+        - name: config-file
+          configMap:
+            name: {{ .Chart.Name }}-config
+        {{- end }}

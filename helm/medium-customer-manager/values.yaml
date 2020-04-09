@@ -2,17 +2,19 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: codefresh/medium-customer-manager
-  tag: 1.0.0
-  pullPolicy: IfNotPresent 
+  repository: r.cfcr.io/docketdynamics/medium-customer-manager
+  tag: "5556008"
+  pullPolicy: IfNotPresent
+containerPort: 80
 service:
-  name: Node
+  enabled: true
+  httpPort: 80
+  nodePort: 30002
   type: NodePort
-  servicePort: 3000
 
 config:
   ## Currently only supports file
   type: file
   ## Contents of config in YAML
   content: |-
-    window.REACT_APP_CUSTOMER_HOST='https://www.bookmarks.dev/api/public/bookmarks'
+    window.REACT_APP_CUSTOMER_HOST='http://172.18.51.90/:30001'
