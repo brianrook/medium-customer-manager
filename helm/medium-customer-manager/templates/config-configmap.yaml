@@ -1,0 +1,10 @@
+{{- if and ( eq .Values.config.type "file") (hasKey .Values.config "content") }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-config
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  config.js:
+    {{ toYaml .Values.config.content | indent 4  }}
+{{- end }}

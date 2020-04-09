@@ -1,0 +1,1 @@
+window.REACT_APP_CUSTOMER_HOST='HTTP://localhost:10000'
