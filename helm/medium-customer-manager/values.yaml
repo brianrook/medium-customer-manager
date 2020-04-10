@@ -17,4 +17,4 @@ config:
   type: file
   ## Contents of config in YAML
   content: |-
-    window.REACT_APP_CUSTOMER_HOST='http://172.18.51.90/:30001'
+    window.REACT_APP_CUSTOMER_HOST=''
